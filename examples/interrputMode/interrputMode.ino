@@ -90,9 +90,10 @@ void setup()
   }
 
   /**
-    设置ALE引脚的极性
-      POLARITY_HIGH         // 设置ALE引脚高电平为活动电平，默认为低电平，产生报警后ALE为高电平
-      POLARITY_LOW          // 设置ALE引脚低极性为活动电平，默认为高电平，产生报警后ALE为低电平
+    设置ALE引脚的极性，引脚极性为高：ALE引脚高电平为活动电平，默认为低电平，产生报警后ALE为高电平
+                       引脚极性为低：ALE引脚低极性为活动电平，默认为高电平，产生报警后ALE为低电平
+      POLARITY_HIGH         // ALE引脚高电平为活动电平
+      POLARITY_LOW          // ALE引脚低极性为活动电平
   */
   if((state = mcp9808.setPolarity(POLARITY_LOW)) == 0){
     Serial.println("设置ALE引脚极性成功！");
@@ -153,8 +154,8 @@ void setup()
 
   /**
     使能或者禁止报警模式，使能报警模式后，ALE引脚到达报警条件后会产生跳变，禁止报警模式ALE引脚没有响应
-      ENABLE_ALERT           // 使能报警模式，ALE引脚到达报警条件后会产生跳变
-      DISABLE_ALERT          // 禁止报警模式，禁止报警模式ALE引脚没有响应
+      ENABLE_ALERT           // 使能报警模式
+      DISABLE_ALERT          // 禁止报警模式
   */
   if((state = mcp9808.setAlertEnable(ENABLE_ALERT)) == 0){
     Serial.println("使能报警模式成功");

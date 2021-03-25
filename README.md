@@ -68,7 +68,8 @@ To use this library, first download the library file, paste it into the \Arduino
   float getTemperature(void);
 
   /**
-   * @brief 获取当前比较器的状态，只有在比较器模式下有效//比较器。。。
+   * @brief 获取当前比较器的状态，只有在比较器模式下有效
+            比较器模式是比较当前温度和上限阈值，下限阈值，和临界值的关系
    * @return state
                 TA 代表当前温度，TCRIT代表临界温度，TUPPER代表上限温度，TLOWER代表下限温度
                 CRIT_0_UPPER_0_LOWER_0    // TA < TCRIT、TA ≤ TUPPER、TA ≥ TLOWER
@@ -84,7 +85,7 @@ To use this library, first download the library file, paste it into the \Arduino
 
   /**
    * @brief 设置锁定模式或解锁，防止错误操作更改上限、下限、临界值的大小
-   * @param state
+   * @param lock
                 CRIT_LOCK       // 锁定临界值，临界值的阈值不允许被修改
                 WIN_LOCK        // 锁定上限下限，上限下限的阈值不允许被修改
                 CRIT_WIN_LOCK   // 锁定临界值和上限下限，上限下限和临界值的数据都不允许被修改
@@ -152,7 +153,6 @@ To use this library, first download the library file, paste it into the \Arduino
    */
   uint8_t getAlertHysteresis(void);
 
-
   /**
    * @brief 使能或者禁止报警模式，使能报警模式后，ALE引脚到达报警条件后会产生跳变，禁止报警模式ALE引脚没有响应
    * @param mode
@@ -164,8 +164,7 @@ To use this library, first download the library file, paste it into the \Arduino
                 0xFE 设置的模式错误，请检查模式
    */
   uint8_t setAlertEnable(uint8_t mode);
-  
-  
+
   /**
    * @brief 获取报警模式状态，得到时报警模式或者非报警模式
    * @return mode
@@ -186,7 +185,7 @@ To use this library, first download the library file, paste it into the \Arduino
                 0xFE 设置的极性错误，请检查极性
    */
   uint8_t setPolarity(uint8_t polarity);
-
+  
   /**
    * @brief 获取ALE引脚的极性状态，引脚极性为高：ALE引脚高电平为活动电平，默认为低电平，产生报警后ALE为高电平
                                    引脚极性为低：ALE引脚低极性为活动电平，默认为高电平，产生报警后ALE为低电平
@@ -246,8 +245,9 @@ To use this library, first download the library file, paste it into the \Arduino
    * @param lower
               // 温度下限，最多两位小数，自动处理成0.25的倍数，范围为-40 到 +125度
    * @return state
-                0x00                              // 设置上限下限成功
-                0xFF                              // 设置上限下限失败，原因是温度上限小于下限，或者上限温度和下限温度小于两度
+                0x00  // 设置上限下限成功
+                0xFF  // 当前寄存器为锁定状态不允许修改
+                0xFE  // 设置上限下限失败，原因是温度上限小于下限，或者上限温度和下限温度小于两度
    */
   uint8_t setUpperLowerThreshold(float upper ,float lower);
 
@@ -255,8 +255,16 @@ To use this library, first download the library file, paste it into the \Arduino
    * @brief 设置温度临界值,根据配置的中断模式响应，这里的临界值温度必须大于上限温度
    * @param value
               // 温度的临界值，最多两位小数，自动处理成0.25的倍数，范围为-40 到 +125度
+   * @return state
+                0x00  // 设置上限下限成功
+                0xFF  // 当前寄存器为锁定状态不允许修改
    */
-  void setCritThreshold(float value);
+  uint8_t setCritThreshold(float value);
+
+  /**
+   * @brief 清空中断，只使用于中断模式下，其余模式没有效果
+   */
+  void clearInterrupt(void);
 
 ```
 ## Compatibility

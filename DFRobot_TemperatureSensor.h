@@ -93,7 +93,7 @@ public:
    * @brief 测试使用，读取寄存器的值
    */
   void readRegister(void);
-  
+
   /**
    * @brief 初始化传感器，对比传感器的芯片id 和 厂商 id
      @return state
